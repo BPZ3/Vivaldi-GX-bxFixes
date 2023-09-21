@@ -1,0 +1,427 @@
+/* Remove border under/above address bar */
+.address-top .mainbar > .toolbar-mainbar {
+  border-bottom: unset;
+}
+.address-bottom .mainbar > .toolbar-mainbar {
+  border-top: unset;
+}
+
+/* Leave space for continued panel bar when it is shown */
+#browser:has(#panels-container:not([style*="width: 0px;"])) .mainbar {
+  margin-left: calc(var(--arePanelsSetToLeft, 0) * var(--GXpanelWidth));
+  margin-right: calc(var(--arePanelsSetToRight, 0) * var(--GXpanelWidth));
+}
+
+/* Fill in continued panel bar area with the same color */
+#browser:has(#panels-container:not([style*="width: 0px;"])) .mainbar::before {
+  content: " ";
+  position: fixed;
+  left: var(--arePanelsSetToRight, 0);
+  right: var(--arePanelsSetToLeft, 0);
+  height: 100vh;
+  width: var(--GXpanelWidth);
+  backdrop-filter: var(--backgroundBlur);
+  background-color: var(--colorBgAlphaBlur);
+  z-index: 0;
+}
+
+/* Border next to continued panel bar if the address bar is set to the top */
+#browser.address-top:has(#panels-container:not([style*="width: 0px;"])) .mainbar > .toolbar-mainbar {
+  border-left: var(--arePanelsSetToRight, 1px solid var(--GXborderColor)) !important;
+  border-right: var(--arePanelsSetToLeft, 1px solid var(--GXborderColor)) !important;
+}
+
+/* Space out contents of address field */
+.UrlBar-AddressField .toolbar-insideinput {
+  margin-left: 20px;
+}
+.UrlBar-AddressField .toolbar-insideinput:first-of-type {
+  margin-left: 15px;
+}
+.UrlBar-AddressField {
+  margin: 0 7px;
+}
+.UrlBar-AddressField:has(+ .SearchField) {
+  margin-right: 2px;
+}
+/* Space out the right-side buttons in the address field */
+.toolbar.toolbar-small.toolbar-insideinput:last-of-type {
+  margin-right: 14px;
+  min-width: 20px;
+  justify-content: flex-end;
+  gap: 5px;
+  height: 100%;
+}
+
+/* Adds extra space between extension icons */
+/* .toolbar-extensions > .button-toolbar:not(:first-child).ExtensionIcon {
+  margin-left: 4px !important;
+}
+.toolbar-extensions > .button-toolbar:not(.ExtensionIcon) {
+  margin-left: 5px !important;
+} */
+
+/* .UrlBar-AddressField .button-toolbar > button:active,
+.mainbar > .toolbar-mainbar > .button-toolbar > button.button-pressed {
+  background-color: var(--colorBgAlphaHeavier) !important;
+  background-image: none !important;
+} */
+
+/* Brighten text in address and search fields */
+.UrlBar-AddressField,
+.SearchField,
+.SearchField-Popup {
+  color: var(--colorFgIntense);
+}
+
+/* Make the text fields blend in with the address bar */
+.UrlBar-AddressField,
+.UrlBar-SearchField,
+.mainbar > .toolbar-mainbar .SearchField-Popup .SearchField {
+  background-color: var(--colorAccentBg);
+  border: unset !important;
+  height: 29px;
+}
+.color-behind-tabs-on .UrlBar-AddressField,
+.color-behind-tabs-on .UrlBar-SearchField,
+.color-behind-tabs-on .mainbar > .toolbar-mainbar .SearchField-Popup .SearchField {
+  background-color: var(--colorBg);
+}
+
+/* Give fields slight background on hover */
+.UrlBar-AddressField:hover,
+.UrlBar-SearchField:hover,
+.mainbar > .toolbar-mainbar .SearchField-Popup .SearchField:hover {
+  background-color: var(--colorHighlightBgAlpha);
+}
+
+/* Give fields a distinctive background when in use */
+.UrlBar-AddressField:focus-within,
+.UrlBar-SearchField:focus-within,
+.mainbar > .toolbar-mainbar .SearchField-Popup .SearchField:focus-within {
+  background-color: var(--colorAccentBgFadedMore);
+}
+
+/* Give more space for URL */
+/* Prevent URL from shifting when focused*/
+.UrlBar-UrlFieldWrapper .observer .UrlField input,
+.UrlBar-UrlFieldWrapper .UrlField .UrlFragment-Wrapper {
+  padding-bottom: 4px;
+  padding-left: 18px;
+}
+
+/* Stylize the Bookmark Button */
+/* Make active bookmark icon match other buttons */
+.BookmarkButton .button-on .bookmark-animated-fill {
+  fill: var(--GXbuttonFill) !important;
+}
+/* Remove shadow from half of bookmark button icon */
+.BookmarkButton .add-bookmark-shadow {
+  display: none;
+}
+/* Hide "Added bookmark" text on clicking bookmark button */
+.BookmarkButton-Button .ToolbarButton-Button > .button-title {
+  display: none !important;
+}
+/* Make border same color as background */
+.BookmarkButton .button-on .bookmark-outline {
+  fill: unset;
+}
+
+/* Replace reader view icon with larger version */
+path[d^="M3 4h10v1H3zM3"] {
+  d: path("M1.5,3h13V4.3H1.5Zm0,4.2h13V8.5H1.5Zm0,4.6H9.3v1.3H1.5Z") !important;
+}
+
+/* Change text selection color of fields */
+.url::selection,
+.UrlBar-SearchField .searchfield-input::selection,
+.mainbar > .toolbar-mainbar .SearchField-Popup .searchfield-input::selection {
+  background-color: var(--colorHighlightBg) !important;
+  color: var(--colorHighlightFg) !important;
+}
+
+/* Stylize extension badges */
+.toolbar-extensions .button-badge {
+  background-color: var(--colorBg) !important;
+  border-radius: var(--radiusHalf);
+  box-shadow: none;
+  height: 12px;
+  border: unset;
+  min-width: 12px;
+  /* Shifts to the bottom corner - might disable if breaks any extensions */
+  margin-top: 18px;
+}
+
+/* Side borders on address field */
+.UrlBar-AddressField::before,
+.UrlBar-AddressField::after {
+  content: var(--GXaddressFieldSideBorders);
+  position: absolute;
+  height: 100%;
+  color: var(--colorAccentFgAlpha);
+  font-size: 19px;
+  opacity: 1;
+  transition: opacity 0.2s;
+}
+.UrlBar-AddressField::before {
+  left: 0;
+}
+.UrlBar-AddressField::after {
+  right: 0;
+}
+/* Hide on focus and hover */
+.UrlBar-AddressField:hover::before,
+.UrlBar-AddressField:focus-within:before,
+.UrlBar-AddressField:hover::after,
+.UrlBar-AddressField:focus-within:after {
+  opacity: 0;
+}
+
+/* Give special hover color for buttons in address field */
+.toolbar-insideinput > .button-toolbar button:hover:not(.button-pressed),
+.UrlBar-AddressField .BookmarkButton.BookmarkButton:hover {
+  border-radius: 0px !important;
+  background-color: hsla(0, 0%, 100%, 0.15) !important;
+}
+.UrlBar-AddressField .BookmarkButton > .button-toolbar button:hover {
+  background-color: hsla(0, 0%, 100%, 0.15) !important;
+}
+
+/* Make buttons in address field slightly smaller */
+.drop-down-menu svg,
+.UrlBar-AddressField .toolbar-insideinput .button-toolbar .button-icon svg {
+  width: 15px;
+  height: 15px;
+  flex: 0 0 15px;
+}
+
+/* Space out search field go button */
+.SearchField-ExecuteSearchButton {
+  margin-right: 5px;
+}
+
+/* Stylize site info button, padlock */
+.SiteInfoButton {
+  margin-left: 13px;
+}
+.SiteInfoButton:hover {
+  background-color: hsla(0, 0%, 100%, 0.15);
+}
+.SiteInfoButton.secure,
+.SiteInfoButton.certified {
+  fill: var(--colorAccentFg);
+  color: var(--colorAccentFg);
+}
+.button-addressfield.SiteInfoButton.internal svg {
+  fill: var(--GXbuttonFill);
+}
+.button-addressfield.SiteInfoButton.secure:hover {
+  fill: var(--colorFg);
+}
+.UrlBar-AddressField .SiteInfoButton.secure .SiteInfoButton-SecurityBadge path {
+  d: path(
+    "M12.5,6.5H11V3.771l-.029-.17A3.247,3.247,0,0,0,8,1.5,3.129,3.129,0,0,0,5.237,3.172a1.648,1.648,0,0,0-.207.811L5.019,6.5H3.5A.5.5,0,0,0,3,7v7a.5.5,0,0,0,.5.5h9A.5.5,0,0,0,13,14V7A.5.5,0,0,0,12.5,6.5ZM6,4.346A1.65,1.65,0,0,1,6.359,3.3a2.095,2.095,0,0,1,3.282,0A1.649,1.649,0,0,1,10,4.346V6.5H6Z"
+  );
+}
+.UrlBar-AddressField .SiteInfoButton:not(.internal).insecure .SiteInfoButton-SecurityBadge path {
+  d: path(
+    "M12.5,6.5H6V4.341A1.624,1.624,0,0,1,6.36,3.3a2.078,2.078,0,0,1,2.14-.73l.78-.77a3.05,3.05,0,0,0-4.04,1.37,1.658,1.658,0,0,0-.21.81L5.02,6.5H3.5A.5.5,0,0,0,3,7v7a.5.5,0,0,0,.5.5h9A.5.5,0,0,0,13,14V7A.5.5,0,0,0,12.5,6.5Z"
+  );
+}
+.SiteInfoButton.insecure {
+  fill: #d42d2d;
+}
+.SiteInfoButton.insecure:hover svg {
+  fill: inherit !important;
+}
+
+/* Search field item alignment */
+.mainbar > .toolbar-mainbar .searchfield-input,
+.mainbar > .toolbar-mainbar .SearchField-Popup .searchfield-input {
+  margin-top: -2px;
+}
+.mainbar > .toolbar-mainbar .toolbar-insideinput.SearchEngineSelect-Icon {
+  margin-left: 6px;
+}
+
+/* Stylize the dropdown menues of the fields */
+:not(.SpeedDialView-SearchField) > .OmniDropdown {
+  background-color: var(--colorAccentBgFadedMore);
+  border-bottom-left-radius: var(--radius);
+  border-bottom-right-radius: var(--radius);
+  /* border-bottom: 2px solid var(--colorAccentBgFadedMost);
+  border-left: 2px solid var(--colorAccentBgFadedMost);
+  border-right: 2px solid var(--colorAccentBgFadedMost); */
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
+  border: 2px solid var(--colorAccentBgFadedMost);
+  border-top: unset;
+  box-shadow: unset;
+  color: var(--colorAccentFg);
+  margin-top: 3px;
+  top: 21px;
+}
+.color-behind-tabs-on .OmniDropdown {
+  border-color: var(--colorHighlightBg);
+}
+.OmniLinkItem {
+  --item-height: 36px !important;
+}
+.OmniLinkItem--Highlighted,
+.OmniLinkItem--Highlighted:hover,
+.OmniLinkItem:not(.OmniLinkItem--Highlighted):hover {
+  background-color: var(--colorHighlightBgAlpha);
+}
+.OmniLinkItem:not(.OmniLinkItem--SingleValue) .OmniLinkItem-Url {
+  color: var(--colorHighlightBgFaded);
+}
+.OmniLinkItem .OmniLinkItem-Url {
+  margin-left: 10px;
+}
+.OmniLinkItem .OmniLinkItem-Url .OmniLinkItem-Url {
+  margin-left: 0;
+}
+.OmniLinkItem--Highlighted .OmniLinkItem-Url,
+.OmniLinkItem--Highlighted:hover .OmniLinkItem-Url,
+.OmniLinkItem:not(.OmniLinkItem--Highlighted):hover .OmniLinkItem-Url {
+  color: var(--colorHighlightFg) !important;
+}
+.UrlBar-SearchField .OmniLinkItem,
+.mainbar > .toolbar-mainbar .SearchField-Popup .OmniLinkItem {
+  grid-template-columns: [Url] 1fr [Details] 1fr [Erase] var(--item-height);
+}
+/* .ignore-react-onclickoutside.OmniDropdown::-webkit-scrollbar {
+  width: 0px !important;
+} */
+span.OmniLinkItem-Details {
+  opacity: 0.85;
+}
+.omni-clickable.OmniLinkItem:hover span.OmniLinkItem-Details,
+.omni-clickable.OmniLinkItem--Highlighted span.OmniLinkItem-Details {
+  opacity: 1;
+}
+.OmniLinkItem-Favicon {
+  height: 28px;
+  width: 28px;
+  padding: 6px;
+}
+.OmniLinkItem-EraseButton {
+  margin-left: 6px;
+}
+.OmniLinkItem-EraseButton:hover {
+  background-color: var(--colorAccentBgAlpha);
+}
+
+/* Border between profile button and extensions */
+/* .toolbar .profile-popup + .toolbar-extensions .button-toolbar:not(.button-narrow):first-of-type::before {
+  content: "";
+  opacity: 1 !important;
+  background: #8c8d8f !important;
+  height: 16px !important;
+  width: 1px;
+} */
+
+/* Stylize the private window indicator */
+.UrlBar-PrivateWindowIndicator {
+  background-color: var(--colorHighlightBg);
+  height: 20px;
+  margin: 0 2px 1px 2px;
+  color: var(--colorHighlightFg);
+}
+
+/* Stylize page loading indicators */
+/* TODO: Didn't test, but leaving in for now */
+progress.pageload-indicator::-webkit-progress-value {
+  background-color: var(--colorHighlightBgAlpha) !important;
+  border-radius: 0px !important;
+}
+progress.pageload-indicator {
+  opacity: 0.5 !important;
+  height: 100% !important;
+  margin: 0px !important;
+  margin-top: -1px !important;
+  border-radius: var(--radius) !important;
+  background-color: transparent !important;
+}
+.pageload.progress-done .pageload-indicator[value="100"] {
+  opacity: 0 !important;
+  transition: 0.5s;
+}
+
+/* Stylize search field search engine dropdown */
+#main .SearchField:not(.SpeedDialView-SearchField) nav.menu {
+  top: 24px;
+}
+.SearchField-Popup nav.menu {
+  top: 26px;
+}
+#main .SearchField:not(.SpeedDialView-SearchField) nav.menu > ul,
+.SearchField-Popup nav.menu > ul {
+  background-color: var(--colorAccentBgFadedMore);
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+  box-shadow: unset;
+  padding: 0;
+  border: 2px solid var(--colorAccentBgFadedMost);
+  border-top: unset;
+}
+#main .SearchField:not(.SpeedDialView-SearchField) nav.menu > ul:before,
+.SearchField-Popup nav.menu > ul:before {
+  /* content: unset; */
+}
+#main .SearchField:not(.SpeedDialView-SearchField) nav.menu > ul > li,
+.SearchField-Popup nav.menu > ul > li {
+  padding: 0px 5px;
+}
+#main .SearchField:not(.SpeedDialView-SearchField) nav.menu > ul > li.selectedItem,
+.SearchField-Popup nav.menu > ul > li.selectedItem {
+  background-color: var(--colorHighlightBgAlpha);
+}
+#main .SearchField:not(.SpeedDialView-SearchField) nav.menu > ul > li a,
+.SearchField-Popup nav.menu > ul > li a {
+  background-color: transparent;
+  height: 36px;
+}
+#main .SearchField:not(.SpeedDialView-SearchField) nav.menu > ul > li .menu-icon,
+.SearchField-Popup nav.menu > ul > li .menu-icon {
+  padding: 6px;
+}
+
+/* Adjust URL fragment highlighting */
+.UrlFragment-Wrapper--ShouldHighlight {
+  --HighlightColor: var(--colorAccentFg) !important;
+  --LowlightColor: var(--colorAccentFgFaded) !important;
+}
+
+/* Fix gaps between dropdowns and fields when corner rounding is set high */
+.SearchField:has(.OmniDropdown),
+.UrlBar-AddressField:has(.OmniDropdown) {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+/* Set URL Field font size */
+.UrlField {
+  font-size: 14px !important;
+}
+
+/* Add slight padding to the side opposite the panels */
+#browser.address-top .mainbar > .toolbar-mainbar {
+  padding-left: var(--arePanelsSetToLeft, 5px);
+  padding-right: var(--arePanelsSetToRight, 5px);
+}
+
+/* Shift address bar buttons up a bit */
+.mainbar > .toolbar-mainbar > .button-toolbar:not(.profile-popup),
+.mainbar > .toolbar-mainbar > .toolbar-extensions .button-toolbar {
+  top: -1px;
+}
+
+/* Make hidden extension toggle background match the extension icons' [REVERTED]*/
+.color-behind-tabs-off .toolbar-extensions:has(.ExtensionIcon--Hidden) > .button-toolbar:last-of-type {
+  background-color: var(--colorAccentBg);
+}
+.color-behind-tabs-on .toolbar-extensions:has(.ExtensionIcon--Hidden) > .button-toolbar:last-of-type {
+  background-color: var(--colorBgDark);
+}

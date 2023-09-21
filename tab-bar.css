@@ -1,0 +1,496 @@
+/* Blend the background with the panel bar when transparent */
+#browser.transparent-tabbar #header {
+  background-color: var(--colorBgAlphaBlur);
+}
+.transparent-tabbar #tabs-subcontainer {
+  background-color: transparent;
+}
+
+/* Give room for increased width of panel when it is shown */
+#browser:not(.horizontal-menu) #tabs-container:not(.none).top,
+#browser.horizontal-menu:has(#panels-container:not([style*="width: 0px;"])) #tabs-container:not(.none).top {
+  margin-left: var(--GXpanelWidth);
+  padding-left: unset;
+}
+#browser:not(.horizontal-menu) #tabs-subcontainer.visible,
+#browser.horizontal-menu:has(#panels-container:not([style*="width: 0px;"])) #tabs-subcontainer.visible {
+  padding-left: var(--arePanelsSetToRight, var(--GXpanelWidth));
+  padding-right: var(--arePanelsSetToLeft, var(--GXpanelWidth));
+}
+#browser:not(.horizontal-menu):has(#panels-container:not([style*="width: 0px;"])) #tabs-subcontainer.visible,
+#browser.horizontal-menu:has(#panels-container:not([style*="width: 0px;"])) #tabs-subcontainer.visible {
+  margin-left: var(--arePanelsSetToRight, var(--GXpanelWidth));
+  margin-right: var(--arePanelsSetToLeft, var(--GXpanelWidth));
+  padding: unset;
+}
+
+/* Hide background on workspace button when on tab bar */
+/* also prevent hovered state from overlaping border */
+.tabbar-workspace-button.workspace-popup {
+  background-color: transparent !important;
+  margin-bottom: 1px;
+}
+.button-toolbar.workspace-popup.tabbar-workspace-button button {
+  height: 29px;
+}
+
+/* Remove default border below/above tab bar */
+.address-bottom #tabs-tabbar-container.top,
+.address-bottom-off #tabs-tabbar-container.top,
+.address-top-off #tabs-tabbar-container.top,
+.address-top #tabs-tabbar-container.bottom,
+.address-top-off #tabs-tabbar-container.bottom,
+.address-bottom-off #tabs-tabbar-container.bottom {
+  border-bottom: unset;
+  border-top: unset;
+}
+
+/* Remove default border around inactive tab stacks */
+.svg-tab-stack {
+  display: none;
+}
+
+/* For lower border to the left of the active tab */
+#tabs-container,
+#tabs-subcontainer {
+  position: relative;
+}
+#tabs-container::before {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: var(--arePanelsSetToRight, 0);
+  right: var(--arePanelsSetToLeft, var(--GXpanelWidth));
+  height: 1px;
+  width: 100%;
+  background-color: var(--GXborderColor);
+}
+#tabs-subcontainer::before {
+  right: var(--arePanelsSetToLeft, 0);
+}
+/* When the panel is hidden contine the border all the way */
+#browser:has(#panels-container[style*="width: 0px;"]):not(:has(#tabs-subcontainer.visible)) #tabs-container::before {
+  left: var(--arePanelsSetToRight, calc(-1 * var(--GXpanelWidth)));
+  right: var(--arePanelsSetToLeft, calc(-1 * var(--GXpanelWidth)));
+}
+
+/* Cover up the lower border to the right of the active tab */
+#tabs-container .tab-position:has(.tab.active)::before {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  right: var(--arePanelsSetToLeft, 0);
+  height: 1px;
+  width: 100vw;
+  background: var(--colorAccentBg);
+}
+
+/* Fix for fade to accent bug when transparency is disabled */
+#browser:not([style^="--colorTabBar: transparent"]) #tabs-container .tab-position.is-substack:has(.tab.active)::before {
+  --adjustedWidth: calc(var(--Width) - 2px);
+  background: linear-gradient(to right, transparent, var(--colorAccentBg) 2px, var(--colorAccentBg) var(--adjustedWidth), var(--colorBg) var(--adjustedWidth), var(--colorBg));
+}
+
+/* Support Accent on Window setting */
+#browser.color-behind-tabs-on #tabs-container .tab-position.is-substack:has(.tab.active)::before {
+  --adjustedWidth: calc(var(--Width) - 2px);
+  background: linear-gradient(to right, transparent, var(--colorBg) 2px, var(--colorBg) var(--adjustedWidth), var(--colorBg) var(--adjustedWidth), var(--colorBg));
+}
+#browser.color-behind-tabs-on #tabs-container .tab-position:has(.tab.active)::before {
+  background: var(--colorBg);
+}
+
+/* Fix missing border on 2nd level tabs for certain screens */
+#tabs-subcontainer {
+  overflow-x: hidden;
+}
+#tabs-subcontainer .tab-position:has(.tab.active)::before {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  right: var(--arePanelsSetToRight, var(--Width));
+  left: var(--arePanelsSetToLeft, var(--Width));
+  height: 1px;
+  width: 100vw;
+  background-color: var(--GXborderColor);
+}
+
+/* Have gradient lower border to the right of the active tab */
+/* Different lengths depending on the number of tabs */
+#tabs-container:not([style*="flex-grow: 0;"]) .tab-position.tab-position:has(> .tab.active)::after,
+#tabs-subcontainer .tab-position:has(> .tab.active)::after {
+  --modLineWidth: 25vw;
+  content: " ";
+  position: absolute;
+  bottom: 0px;
+  right: calc(calc(var(--modLineWidth) - 1px) * -1);
+  height: 1px;
+  width: var(--modLineWidth);
+  background-image: linear-gradient(to right, var(--GXborderColor), transparent);
+}
+.tab-strip > span:nth-child(1) > .tab-position:has(> .tab.active)::after,
+.tab-strip > span:nth-child(2) > .tab-position:has(> .tab.active)::after {
+  --modLineWidth: 50vw !important;
+}
+.tab-strip > span:nth-child(3) > .tab-position:has(> .tab.active)::after {
+  --modLineWidth: 40vw !important;
+}
+.tab-strip > span:nth-child(4) > .tab-position:has(> .tab.active)::after {
+  --modLineWidth: 35vw !important;
+}
+.tab-strip > span:nth-child(5) > .tab-position:has(> .tab.active)::after {
+  --modLineWidth: 30vw !important;
+}
+/* Flip for panelson the right */
+#browser:has(#panels-container.right) #tabs-container:not([style*="flex-grow: 0;"]) .tab-position.tab-position:has(> .tab.active)::after,
+#browser:has(#panels-container.right) #tabs-subcontainer .tab-position:has(> .tab.active)::after {
+  --modLineWidth: 50vw;
+  left: calc(calc(var(--modLineWidth) - 1px) * -1);
+  background-image: linear-gradient(to left, var(--GXborderColor), transparent);
+}
+#browser:has(#panels-container.right) .tab-strip > span:nth-child(1) > .tab-position:has(> .tab.active)::after,
+#browser:has(#panels-container.right) .tab-strip > span:nth-child(2) > .tab-position:has(> .tab.active)::after {
+  --modLineWidth: 30vw !important;
+}
+#browser:has(#panels-container.right) .tab-strip > span:nth-child(3) > .tab-position:has(> .tab.active)::after {
+  --modLineWidth: 35vw !important;
+}
+#browser:has(#panels-container.right) .tab-strip > span:nth-child(4) > .tab-position:has(> .tab.active)::after {
+  --modLineWidth: 40vw !important;
+}
+#browser:has(#panels-container.right) .tab-strip > span:nth-child(5) > .tab-position:has(> .tab.active)::after {
+  --modLineWidth: 50vw !important;
+}
+
+/* Borders left/top/right around active tab */
+#tabs-tabbar-container .tab {
+  border: 1px solid transparent;
+  border-bottom-width: 0;
+}
+#tabs-tabbar-container .tab.active {
+  border-color: var(--GXborderColor);
+}
+
+/* Hide 2nd level tab border when on panel side edge */
+#browser:has(#panels-container.left) #tabs-subcontainer span:first-of-type .tab.active {
+  border-left: unset;
+  padding-left: 1px;
+}
+
+/* Remove gap between main and secondary tab bars */
+.tabs-top .tab-position .tab.insubstrip,
+.tabs-bottom .tab-position .tab.insubstrip {
+  margin: 0;
+}
+
+/* Border on the left of the 2nd level tab bar */
+#tabs-subcontainer .tab-strip {
+  border-left: var(--arePanelsSetToRight, 1px solid var(--GXborderColor));
+}
+#tabs-subcontainer {
+  border-right: var(--arePanelsSetToLeft, 1px solid var(--GXborderColor)) !important;
+}
+
+/* Stylize compact tab stack indicators */
+.tab-group-indicator {
+  left: 0;
+  right: 0;
+  top: 0 !important;
+  bottom: unset !important;
+}
+.tab-indicator + .tab-indicator {
+  margin-left: -1px;
+}
+.tab-indicator {
+  border: 1px solid var(--GXborderColor) !important;
+  background-color: transparent !important;
+  height: 5px;
+  padding-bottom: unset !important;
+}
+.tab-indicator:hover {
+  background-color: var(--colorHighlightBgFaded) !important;
+}
+.tab-group-indicator .tab-indicator.active {
+  background-color: var(--GXborderColor) !important;
+  height: unset;
+  border-bottom-width: unset;
+  border-top-width: unset;
+}
+
+/* Change tab hovered indicator color */
+.tab:not(.active):hover {
+  background-color: var(--colorHighlightBgAlpha) !important;
+}
+
+/* Stylize tab close button */
+.tab .close {
+  background-color: transparent;
+  opacity: 1;
+}
+.tab .close:hover {
+  background-color: var(--colorBgAlphaHeavier) !important;
+}
+.tab.active .close:hover {
+  background-color: var(--colorAccentBgAlphaHeavy);
+}
+.tab .close svg > path,
+#vivaldi-tooltip .close path {
+  d: path(
+    "M13.374,4.335l-.707-.707L8.508,7.787a.012.012,0,0,1-.016,0L4.333,3.628l-.707.707L7.785,8.494a.012.012,0,0,1,0,.016L3.626,12.669l.707.707L8.492,9.217a.012.012,0,0,1,.016,0l4.159,4.159.707-.707L9.215,8.51a.012.012,0,0,1,0-.016Z"
+  );
+}
+/* Show tab unread indicator on hover */
+.tab-position .tab.unread .close:not(:hover) {
+  background-color: var(--GXbuttonFill) !important;
+  border-radius: 100%;
+  transform: scale(0.5);
+}
+.tab-position .tab.unread .close:not(:hover) svg {
+  transform: scale(0);
+}
+/* Hide default unread indicator */
+.tab-position .tab.unread {
+  background-image: unset;
+}
+
+/* Cut off top left corner of tab and draw border along the edge */
+#tabs-container .tab:not(.tab-group) {
+  clip-path: polygon(6.5px 0%, 100% 0, 100% 100%, 0 100%, 0% 6.5px);
+}
+#tabs-container .tab:not(.tab-group).active {
+  background-image: linear-gradient(135deg, var(--GXborderColor) 4.5px, transparent 0px);
+}
+
+/* #tabs-container[style*="flex-grow: 0;"] .tab.active {
+  clip-path: none !important;
+  border-radius: 3px !important;
+  background-image: none !important;
+}
+#tabs-container[style*="flex-grow: 0;"] .tab:not(.tab-group).active {
+  background-color: var(--GXborderColor) !important;
+  color: var(--colorHighlightFgDark);
+  fill: var(--colorHighlightFgDark);
+}
+#tabs-container[style*="flex-grow: 0;"] .tab.active.marked {
+  background-color: transparent !important;
+  border: 2px solid var(--GXborderColor) !important;
+}
+#tabs-container[style*="flex-grow: 0;"] .newtab button svg {
+  fill: var(--colorFg) !important;
+}
+#tabs-container[style*="flex-grow: 0;"] .tab:not(.active):hover,
+#tabs-container[style*="flex-grow: 0;"] .newtab > button:hover {
+  background-color: var(--colorAccentBgAlpha) !important;
+} */
+
+/* Stylize tab selection indicators */
+#tabs-tabbar-container .svg-tab-selection {
+  display: none;
+}
+#tabs-tabbar-container .tab.active.marked {
+  background-color: transparent !important;
+  border: 3px solid var(--GXborderColor) !important;
+}
+#tabs-tabbar-container .tab.marked {
+  background-color: transparent !important;
+  border: 1px solid var(--GXborderColor) !important;
+}
+#tabs-tabbar-container .tab.marked:not(.tab-group) {
+  background-image: linear-gradient(135deg, var(--GXborderColor) 4.5px, transparent 0px);
+}
+#tabs-tabbar-container .tab-indicator.marked.active.tab-indicator.marked:after {
+  content: unset;
+}
+
+/*  */
+.tab-group .tab-header > span.favicon {
+  /* to get to 15px tall */
+  transform: scale(0.833) !important;
+}
+.tab-group .tab-header > .title {
+  margin-left: -3px;
+  margin-right: 0;
+  margin-top: 0.833px;
+  font-size: 11px;
+}
+/* Give more room for compact tab stack indicators by scaling down tab header */
+.tab-group .tab-header > .close {
+  transform: scale(0.833) !important;
+}
+#browser:not(.alt-tabs) #tabs-container .tab.tab-group:not(.tab-mini) .close {
+  margin-right: 3px;
+}
+#tabs-container .tab-position .tab.tab-group .tab-header {
+  padding-top: 7px;
+  padding-bottom: 5px;
+  padding-left: 3px;
+}
+
+/* Hide backdrop behind active tab's favicon */
+.transparent-tabbar .tab-position .tab.active .tab-header .favicon:not(.svg),
+.theme-dark .tab-position .tab.active .tab-header .favicon:not(.svg),
+.acc-dark.color-behind-tabs-off .tab-position .tab.active .tab-header .favicon:not(.svg) {
+  filter: unset;
+}
+
+/* Give all favicons a slight backdrop */
+.tab-position .tab .tab-header .favicon:not(.svg) {
+  filter: drop-shadow(0px 0px 1px var(--colorAccentBg));
+}
+#browser.color-behind-tabs-on .tab-position .tab .tab-header .favicon:not(.svg) {
+  filter: drop-shadow(0px 0px 1px var(--colorBg));
+}
+
+/* Hide default borders above and below 2nd level tabs */
+#tabs-subcontainer {
+  box-shadow: unset !important;
+}
+
+/* Stylize tab popup tooltips */
+#vivaldi-tooltip .tooltip .tooltip-item {
+  background-color: var(--colorAccentBg);
+  color: var(--colorAccentFg);
+}
+#vivaldi-tooltip .tooltip .tab-group .tooltip-item.last-active {
+  background-color: var(--colorAccentBgDark);
+}
+#vivaldi-tooltip .tooltip .tab-group .tooltip-item:hover {
+  background-color: var(--colorHighlightBgDark);
+  color: var(--colorHighlightFg);
+  fill: var(--colorHighlightFg);
+}
+/* Border under active tab preview */
+/* .active.tooltip-item.active {
+  border-bottom: 1px solid var(--GXborderColor);
+} */
+#vivaldi-tooltip .tooltip-item .tooltip-audio-button {
+  background-color: transparent !important;
+}
+
+/* remove gap between tab popup tooltip and tab bar */
+#browser.tabs-top > #vivaldi-tooltip .tooltip[style*="top: 3"] {
+  top: 30px !important;
+}
+#browser.tabs-top > #vivaldi-tooltip .tooltip[style*="top: 4"] {
+  top: 39px !important;
+}
+#browser.tabs-top > #vivaldi-tooltip .tooltip[style*="top: 6"] {
+  top: 61px !important;
+}
+#browser.tabs-top > #vivaldi-tooltip .tooltip[style*="top: 7"] {
+  top: 70px !important;
+}
+
+/* Stylize net tab button */
+.newtab button svg > path {
+  d: path("M26,11.818H14.214a.032.032,0,0,1-.032-.032V0H11.818V11.786a.032.032,0,0,1-.032.032H0v2.364H11.786a.032.032,0,0,1,.032.032V26h2.364V14.214a.032.032,0,0,1,.032-.032H26Z");
+}
+.toolbar-tabbar .button-toolbar.newtab button svg {
+  height: 11px;
+  width: 11px;
+  color: var(--GXbuttonFill);
+}
+#tabs-container[style*="flex-grow: 0;"] .newtab button svg {
+  color: var(--colorFg) !important;
+}
+.toolbar-tabbar .button-toolbar.newtab button {
+  opacity: 1;
+}
+.toolbar-tabbar .button-toolbar.newtab button:hover {
+  background-color: var(--colorHighlightBgAlpha);
+}
+
+/* Stylize tab audio playing icon */
+#tabs-tabbar-container .tab .tab-audio,
+#tabs-tabbar-container .tab.pinned.audio-on .tab-audio,
+#tabs-tabbar-container .tab.tab-small.audio-on .tab-audio {
+  transform: scale(0.8) !important;
+  left: 1px;
+  bottom: 0;
+  border-radius: 100%;
+  background-color: rgba(200, 180, 180, 0.85) !important;
+  color: var(--colorBg) !important;
+  padding: unset;
+  height: 16px;
+  width: 16px;
+}
+/* keep favicon from disappearing while audio icon is shown */
+.tab.audio-on .favicon,
+.tab.audio-muted .favicon {
+  transform: scale(1) !important;
+}
+/* Shrink audio icon on tab stacks to match shrunk favicon (when compact tab stacks are used) */
+#tabs-tabbar-container .tab.tab-group .tab-audio,
+#tabs-tabbar-container .tab.tab-group.tab-small.audio-on .tab-audio {
+  transform: scale(calc(0.8 * 0.833)) !important;
+  left: 0.833px;
+}
+
+/* Make the tab stack counter blend in with background when the stack is active */
+.stack-counter {
+  background-color: var(--GXbuttonFill) !important;
+  color: var(--colorHighlightFg) !important;
+  padding-top: 2px !important;
+
+}
+.tab.active .stack-counter {
+  background-color: var(--colorAccentBg) !important;
+  color: var(--colorAccentFg) !important;
+  padding-top: 2px !important;
+
+}
+#browser.color-behind-tabs-on .tab.active .stack-counter {
+  background-color: var(--colorBg) !important;
+  color: var(--colorFg) !important;
+}
+
+/* For non-transparent tab bar, fade into transparent UI */
+#browser:not(.transparent-tabbar).tabs-top #header {
+  background-color: transparent;
+}
+#browser:not(.transparent-tabbar) #tabs-tabbar-container {
+  background-color: transparent;
+  background-image: linear-gradient(to top, var(--colorBgAlphaBlur), var(--colorBg));
+}
+
+/* Remove corner rounding from corners of tabs */
+.tab-position > .tab.active {
+  border-radius: unset !important;
+  margin-bottom: 0;
+}
+.tabs-top .tab.active:not(.marked):not(.tab-mini):not(.tab-in-accordion):after,
+.tabs-top .tab.active:not(.marked):not(.tab-mini):not(.tab-in-accordion):before,
+.tabs-bottom .tab.active:not(.marked):not(.tab-mini):not(.tab-in-accordion):after,
+.tabs-bottom .tab.active:not(.marked):not(.tab-mini):not(.tab-in-accordion):before {
+  content: unset;
+}
+
+/* Remove corner rounding from top left to prevent interfering with cut */
+#tabs-container .tab-position .tab {
+  border-top-left-radius: unset !important;
+}
+
+/* Make tab stack rename input focused/unfocused state match */
+.tab-position .tab .title input {
+  color: var(--colorAccentFg);
+  background-color: var(--colorAccentBgDark);
+  border-color: rgba(0, 0, 0, 0.15);
+  box-shadow: none;
+  border-width: 1px;
+  margin-left: -3px;
+}
+#browser.color-behind-tabs-on .tab-position .tab .title input {
+  background-color: var(--colorBgDark);
+}
+
+/* Remove new corner rounding on tab stack indicators */
+.tab-group-indicator {
+  padding-right: unset;
+  padding-left: unset;
+}
+.tab-indicator:first-of-type {
+  border-top-left-radius: unset;
+}
+.tab-indicator:last-of-type {
+  border-top-right-radius: unset;
+}
